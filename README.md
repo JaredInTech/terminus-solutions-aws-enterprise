@@ -68,7 +68,7 @@ This repository contains the complete implementation of an enterprise AWS infras
 | 8 | Lambda & API Gateway | 📅 Planned | Serverless microservices |
 | 9 | SQS, SNS & EventBridge | 📅 Planned | Event-driven architecture |
 | 10 | CloudWatch & Systems Manager | 📅 Planned | Comprehensive monitoring |
-| 11 | CloudFormation IaC | 📅 Planned | Automated deployments |
+| 11 | CloudFormation & Terraform IaC | 📅 Planned | Automated deployments |
 | 12 | Security Services | 📅 Planned | GuardDuty, Security Hub |
 | 13 | Container Services | 📅 Planned | ECS Fargate, EKS, service mesh |
 
