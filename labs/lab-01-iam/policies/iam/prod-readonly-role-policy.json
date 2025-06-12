@@ -1,0 +1,44 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "ReadOnlyAccess",
+            "Effect": "Allow",
+            "Action": [
+                "ec2:Describe*",
+                "s3:ListBucket",
+                "s3:GetBucketLocation",
+                "s3:GetObject",
+                "rds:Describe*",
+                "cloudwatch:Get*",
+                "cloudwatch:List*",
+                "cloudwatch:Describe*",
+                "logs:Describe*",
+                "logs:Get*",
+                "cloudformation:Describe*",
+                "cloudformation:List*",
+                "cloudformation:Get*"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "DenyDestructiveActions",
+            "Effect": "Deny",
+            "Action": [
+                "ec2:TerminateInstances",
+                "ec2:StopInstances",
+                "ec2:DeleteVolume",
+                "rds:DeleteDBInstance",
+                "rds:StopDBInstance",
+                "s3:DeleteBucket",
+                "s3:DeleteObject",
+                "iam:DeleteRole",
+                "iam:DeleteUser",
+                "iam:RemoveRoleFromInstanceProfile",
+                "lambda:DeleteFunction",
+                "dynamodb:DeleteTable"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
