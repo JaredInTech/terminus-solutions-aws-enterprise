@@ -1,7 +1,7 @@
 
 <!--
 Terminus Solutions AWS Enterprise Architecture
-Copyright (c) 2024 Jared (Terminus Solutions) - jaredintech.com
+Copyright (c) 2025 Jared (Terminus Solutions) - jaredintech.com
 Licensed under CC BY-SA 4.0 - Attribution required
 See LICENSE-DOCS for details
 -->
