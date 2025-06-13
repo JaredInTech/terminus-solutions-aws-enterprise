@@ -171,7 +171,7 @@ When adding architectural documentation:
 | Lab | Component | Status | Documentation |
 |-----|-----------|--------|---------------|
 | 1 | IAM & Organizations | ✅ Complete | [View](/labs/lab-01-iam/README.md) |
-| 2 | VPC & Networking Core | 🚧 In Progress | [View](/labs/lab-02-vpc/README.md) |
+| 2 | VPC & Networking Core | ✅ Complete | [View](/labs/lab-02-vpc/README.md) |
 | 3 | EC2 & Auto Scaling Platform | 📅 Planned | - |
 | 4 | S3 & Storage Strategy | 📅 Planned | - |
 | 5 | RDS & Database Services | 📅 Planned | - |
@@ -186,5 +186,4 @@ When adding architectural documentation:
 
 ---
 
-*Lab Status: 1/13 Completed*  
-*Last Updated: June 11th, 2025*
+*Last Updated: June 12th, 2025*

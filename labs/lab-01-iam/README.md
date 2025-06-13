@@ -11,11 +11,15 @@ See LICENSE-DOCS for details
 
 In this lab, I established the security backbone for Terminus Solutions' cloud infrastructure. I created a multi-account AWS Organizations structure with three accounts (Production, Development, Security), implemented Service Control Policies for governance, set up cross-account access patterns, and configured comprehensive audit logging with CloudTrail.
 
-> **Architecture Decision**: See [ADR-001: Multi-Account Strategy](../../architecture/decisions/adr-001-multi-account-strategy.md) for detailed rationale.
-
 > **Security Note:** All AWS account IDs, email addresses, and sensitive information in this repository are **redacted or fictional** for security compliance.
 
-## 🏗️ Architecture
+## 📐 Architecture Decisions
+
+This lab implements the following architectural decision:
+
+   [ADR-001: Multi-Account Strategy - Account and OU structure](../../architecture/decisions/adr-001-multi-account-strategy.md)
+   
+## 🏗️ Architecture Diagram
 
 ![Lab 1 Architecture](../../architecture/diagrams/iam-architecture.png)
 
@@ -135,14 +139,14 @@ $ aws sts assume-role \
 ![CloudTrail Dashboard](./screenshots/cloudtrail-enabled.png)
 *Organization-wide CloudTrail capturing all API activity*
 
-## 🔧 Testing & Troubleshooting
+## 🔧 Testing & Validation
 
 |Role|EC2 Launch|EC2 View|S3 Create|S3 Delete|RDS Create|
 |---|---|---|---|---|---|
 |TerminusDeveloperRole|✓ (t2/t3 only)|✓|✓ (dev buckets)|✓ (dev buckets)|✓ (t2/t3 only)|
 |TerminusProductionReadOnlyRole|✗|✓|✗|✗|✗|
 
-**For detailed solutions and additional issues, see the complete [Troubleshooting Guide](./docs/lab-01-troubleshooting.md).**
+**For common issues and troubleshooting, see the [Troubleshooting Guide](./docs/lab-01-troubleshooting.md).**
 
 ## 🚀 Next Steps
 
@@ -155,7 +159,7 @@ $ aws sts assume-role \
 
 | Lab | Component | Status | Documentation |
 |-----|-----------|--------|---------------|
-| 1 | IAM & Organizations | ✅ Complete | [View](/labs/lab-01-iam/README.md) |
+| 1 | IAM & Organizations | ✅ Complete | **📍You are here** |  <!-- Highlight current -->
 | 2 | VPC & Networking Core | 🚧 In Progress | [View](/labs/lab-02-vpc/README.md) |
 | 3 | EC2 & Auto Scaling Platform | 📅 Planned | - |
 | 4 | S3 & Storage Strategy | 📅 Planned | - |

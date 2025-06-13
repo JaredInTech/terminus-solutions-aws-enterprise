@@ -6,7 +6,10 @@ Licensed under CC BY-SA 4.0 - Attribution required
 See LICENSE-DOCS for details
 -->
 
-# <img src="./assets/logo.png" alt="Terminus Solutions" height="60"/> Terminus Solutions - Enterprise AWS Architecture
+
+<div align="center"> <img src="./assets/logo.png" alt="Terminus Solutions" height="120"/></div>
+
+# **Terminus Solutions - Enterprise AWS Architecture**
 
 ![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)
 ![Terraform](https://img.shields.io/badge/terraform-%235835CC.svg?style=for-the-badge&logo=terraform&logoColor=white)
@@ -54,23 +57,27 @@ This repository contains the complete implementation of an enterprise AWS infras
 ![Architecture Overview](./architecture/diagrams/architecture-overview.png)
 
 
-## 📊 Project Progress
+### 📊 Project Navigation
 
-| Lab | Component | Status | Key Achievements |
-|-----|-----------|--------|------------------|
-| 1 | [IAM & Organizations](./labs/lab-01-iam/) | ✅ Complete | Multi-account structure, SCPs, CloudTrail |
-| 2 | [VPC & Networking](./labs/lab-02-vpc/) | 🚧 In Progress | Multi-region network backbone |
-| 3 | EC2 & Auto Scaling | 📅 Planned | Mixed instance fleets, spot optimization |
-| 4 | S3 & Storage Strategy | 📅 Planned | Lifecycle policies, intelligent tiering |
-| 5 | RDS & Database Services | 📅 Planned | Aurora Serverless, read replicas |
-| 6 | Route53 & CloudFront | 📅 Planned | Global content delivery |
-| 7 | ELB & High Availability | 📅 Planned | Multi-tier load balancing |
-| 8 | Lambda & API Gateway | 📅 Planned | Serverless microservices |
-| 9 | SQS, SNS & EventBridge | 📅 Planned | Event-driven architecture |
-| 10 | CloudWatch & Systems Manager | 📅 Planned | Comprehensive monitoring |
-| 11 | CloudFormation & Terraform IaC | 📅 Planned | Automated deployments |
-| 12 | Security Services | 📅 Planned | GuardDuty, Security Hub |
-| 13 | Container Services | 📅 Planned | ECS Fargate, EKS, service mesh |
+| Lab | Component | Status | Documentation |
+|-----|-----------|--------|---------------|
+| 1 | IAM & Organizations | ✅ Complete | [View](/labs/lab-01-iam/README.md) |
+| 2 | VPC & Networking Core | ✅ Complete | [View](/labs/lab-02-vpc/README.md) |
+| 3 | EC2 & Auto Scaling Platform | 📅 Planned | - |
+| 4 | S3 & Storage Strategy | 📅 Planned | - |
+| 5 | RDS & Database Services | 📅 Planned | - |
+| 6 | Route53 & CloudFront Distribution | 📅 Planned | - |
+| 7 | ELB & High Availability | 📅 Planned | - |
+| 8 | Lambda & API Gateway Services | 📅 Planned | - |
+| 9 | SQS, SNS & EventBridge Messaging | 📅 Planned | - |
+| 10 | CloudWatch & Systems Manager Monitoring | 📅 Planned | - |
+| 11 | CloudFormation Infrastructure as Code | 📅 Planned | - |
+| 12 | Security Services Integration | 📅 Planned | - |
+| 13 | Container Services (ECS/EKS) | 📅 Planned | - |
+
+*Last Updated: June 12th, 2025*
+
+---
 
 ## 💰 Cost Analysis
 
@@ -131,8 +138,9 @@ terminus-solutions-aws-enterprise/
 
 ## 🎯 Key Architectural Decisions
 
-- **[ADR-001](./architecture/decisions/adr-001-multi-account-strategy.md)**: Multi-Account Strategy - Why separate accounts over VPC isolation
-- **[ADR-002](./architecture/decisions/adr-002-vpc-networking.md)**: VPC & Networking Architecture - Implementing robust architecture (Coming Soon)
+- **[ADR-001](./architecture/decisions/adr-001-multi-account-strategy.md)**: Organization & Multi-Account Strategy
+- **[ADR-002](./architecture/decisions/adr-002-vpc-cidr-allocation-strategy.md)**: IP Addressing Strategy
+- **[ADR-003](./architecture/decisions/adr-003-network-segmentation-architecture.md)**: Networking Segmentation Strategy
 - **...and more**
 
 See all [Architecture Decision Records](./architecture/decisions/).
@@ -176,8 +184,7 @@ This means:
 - ✅ Improvements must be shared back
 - ✅ Commercial use is allowed with attribution
 
-For commercial training or consulting based on this material, 
-contact: jared@jaredintech.com
+For any inquiries regarding material in this repository, contact: jared@jaredintech.com
 
 ## 🙏 Acknowledgments
 

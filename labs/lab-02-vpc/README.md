@@ -1,6 +1,6 @@
 <!--
 Terminus Solutions AWS Enterprise Architecture
-Copyright (c) 2024 Jared (Terminus Solutions) - jaredintech.com
+Copyright (c) 2025 Jared (Terminus Solutions) - jaredintech.com
 Licensed under CC BY-SA 4.0 - Attribution required
 See LICENSE-DOCS for details
 -->
@@ -9,172 +9,198 @@ See LICENSE-DOCS for details
 
 ## What I Built
 
-In this lab, I established the complete network foundation for Terminus Solutions' cloud infrastructure. I created a production-grade, multi-region VPC architecture with a primary production VPC in us-east-1 and a disaster recovery VPC in us-west-2. The implementation includes a three-tier network design (public DMZ, private application, and private data tiers), multi-AZ high availability with redundant NAT Gateways, cross-region VPC peering for disaster recovery, comprehensive security controls with NACLs and Security Groups, and VPC Flow Logs for network monitoring.
+In this lab, I created a production-grade, multi-region network infrastructure for Terminus Solutions. I built a three-tier VPC architecture in us-east-1 (Production) and us-west-2 (DR) with complete subnet segmentation, redundant NAT Gateways, cross-region VPC peering, comprehensive security controls with NACLs and Security Groups, and VPC endpoints for private AWS service access.
 
-> **Security Note:** All AWS account IDs, email addresses, and sensitive information in this repository are **redacted or fictional** for security compliance.
+> **Security Note:** All sensitive network configurations, IP ranges, and security group IDs in this repository are **redacted or fictional** for security compliance.
 
-## Architecture
+## 📐 Architecture Decisions
+
+This lab implements several significant architectural decisions:
+
+- **[ADR-002: VPC CIDR Allocation Strategy](../../architecture/decisions/adr-002-vpc-cidr-allocation-strategy.md)** - Hierarchical IP addressing scheme using 10.0.0.0/8
+- **[ADR-003: Network Segmentation Architecture](../../architecture/decisions/adr-003-network-segmentation-architecture.md)** - Three-tier subnet design with security isolation
+- **[ADR-004: Multi-Region DR Network Design](../../architecture/decisions/adr-004-multi-region-dr-network-design.md)** - VPC Peering vs Transit Gateway decision
+- **[ADR-005: Network Security Controls Strategy](../../architecture/decisions/adr-005-network-security-controls-strategy.md)** - Defense-in-depth with NACLs and Security Groups
+- **[ADR-006: VPC Endpoints and Private Connectivity](../../architecture/decisions/adr-006-vpc-endpoints-private-connectivity.md)** - Private AWS service access patterns
+
+## 🏗️ Architecture Diagram
 
 ![Lab 2 Architecture](../../architecture/diagrams/vpc-architecture.png)
 
-The architecture implements a multi-region, multi-AZ network design with:
-- Production VPC (10.0.0.0/16) in us-east-1 with 6 subnets across 2 AZs
-- DR VPC (10.1.0.0/16) in us-west-2 with identical subnet structure
-- VPC Peering for secure cross-region connectivity
-- Three-tier subnet design: Public (DMZ), Private Application, and Private Data
-- Redundant NAT Gateways in each AZ for high availability
-- VPC Endpoints for private AWS service access (S3, Systems Manager)
+## ✅ Prerequisites
 
-## Prerequisites
-
-- ✅ Completed Lab 1 (IAM & Organizations Foundation)
-- ✅ Access to Production and Development accounts via cross-account roles
-- ✅ Understanding of IP addressing and CIDR notation
+- ✅ Completed Lab 1 (IAM & Organizations)
+- ✅ Access to Production and Development accounts
+- ✅ Understanding of IP addressing and subnetting
 - ✅ Basic knowledge of routing concepts
 
-## Cost Considerations
+## 💰 Cost Considerations
 
-**Estimated Monthly Cost**: $90-120 USD
+**USD**: ~$5-10 for this lab (primarily NAT Gateway costs)
 
-Primary cost drivers:
-- NAT Gateways: ~$45/month per gateway (2 in production + 2 in DR = 4 total)
-- VPC Endpoints (Interface): ~$7/month per endpoint per AZ
-- Data Transfer: Cross-region peering charges at $0.02/GB
-- VPC Flow Logs: CloudWatch storage charges
+### Key Cost Drivers:
+- **NAT Gateways**: $0.045/hour per gateway (2 in production, 2 in DR)
+- **VPC Peering**: No hourly charges, data transfer at $0.02/GB cross-region
+- **VPC Endpoints**: Interface endpoints at $0.01/hour each
+- **Data Transfer**: Cross-AZ at $0.01/GB, cross-region at $0.02/GB
 
-**Cost Optimization Applied**:
-- Used Gateway endpoints for S3 (free) instead of Interface endpoints
-- Consolidated Interface endpoints to only necessary services
-- Configured appropriate Flow Log retention (90 days)
+Refer to [Cost Analysis](./docs/lab-02-costs.md) for detailed breakdown and optimization strategies.  
+Refer to [Network Costs](../../architecture/cost-analysis/network-costs.md) for in-depth architectural cost analysis pertaining to organizations at greater scale.
 
-Refer to [Cost Considerations](./COST-CONSIDERATIONS.md) for detailed analysis.
+## 🔐 Network Components Created
 
-## Implementation Notes
+### VPCs and Subnets
+- **Production VPC** (10.0.0.0/16) in us-east-1
+  - Public Subnets: 10.0.1.0/24, 10.0.2.0/24
+  - Private App Subnets: 10.0.11.0/24, 10.0.12.0/24
+  - Private Data Subnets: 10.0.21.0/24, 10.0.22.0/24
+- **DR VPC** (10.1.0.0/16) in us-west-2
+  - Matching subnet structure for disaster recovery
+
+### Security Components
+- **Security Groups**:
+  - `Terminus-ALB-SG` - Internet-facing load balancer
+  - `Terminus-WebTier-SG` - Application servers
+  - `Terminus-Database-SG` - Database tier (no internet access)
+- **Network ACLs**:
+  - Custom NACLs per tier with stateless rules
+  - Ephemeral port handling for return traffic
+
+### Connectivity
+- **Internet Gateways** - One per VPC
+- **NAT Gateways** - Redundant gateways per AZ (4 total)
+- **VPC Peering** - Cross-region connection for DR
+- **VPC Endpoints** - S3 Gateway endpoint, SSM Interface endpoints
+
+### Monitoring
+- **VPC Flow Logs** - Comprehensive traffic monitoring to CloudWatch
+- **CloudWatch Log Groups** - 90-day retention for compliance
+
+## 📝 Implementation Notes
 
 ### Key Steps
 
-1. **Designed IP Address Strategy**
-   ```
-   Production (us-east-1): 10.0.0.0/16
-   - Public: 10.0.1.0/24, 10.0.2.0/24
-   - Private App: 10.0.11.0/24, 10.0.12.0/24
-   - Private Data: 10.0.21.0/24, 10.0.22.0/24
-   
-   DR (us-west-2): 10.1.0.0/16
-   - Identical subnet design with 10.1.x.x addressing
+**Time Investment**: 4 hours implementation + 1 hour testing + 2 hours documentation
+
+1. **Created Production VPC with Multi-AZ Design**
+   ```bash
+   # Used "VPC and more" to create complete infrastructure
+   # 2 AZs, 6 subnets total, redundant NAT Gateways
    ```
 
-2. **Created Production VPC Infrastructure**
-   - Used "VPC and more" wizard for faster deployment
-   - Configured DNS resolution and hostnames for private DNS
-   - Deployed NAT Gateway in each AZ for redundancy
+2. **Implemented Three-Tier Security Architecture**
+   ```yaml
+   Public Tier: Internet-facing components (ALB, NAT GW)
+   Application Tier: Private subnets with outbound internet via NAT
+   Data Tier: Isolated subnets with no internet routing
+   ```
 
-3. **Implemented Security Layers**
-   - Security Groups: Stateful, instance-level protection
-   - NACLs: Stateless, subnet-level defense in depth
-   - VPC Flow Logs: Complete network traffic monitoring
+3. **Established Cross-Region DR Connectivity**
+   ```json
+   # VPC Peering configuration
+   {
+     "Production": "10.0.0.0/16",
+     "DR": "10.1.0.0/16",
+     "Connection": "Cross-region peering with DNS resolution"
+   }
+   ```
 
-4. **Established Cross-Region Connectivity**
-   - VPC Peering between production and DR regions
-   - Updated route tables in both VPCs
-   - Configured security groups for cross-region database replication
+4. **Configured Defense-in-Depth Security**
+   ```
+   Layer 1: Network ACLs (subnet-level, stateless)
+   Layer 2: Security Groups (instance-level, stateful)
+   Layer 3: VPC Endpoints (private AWS service access)
+   Layer 4: Flow Logs (comprehensive monitoring)
+   ```
 
 ### Important Configurations
 
 ```yaml
-# Production VPC Configuration
-VPC CIDR: 10.0.0.0/16
-Region: us-east-1
-AZs: us-east-1a, us-east-1b
-NAT Gateways: 2 (one per AZ)
-Internet Gateway: 1
-VPC Endpoints: S3 (Gateway), SSM/EC2Messages/SSMMessages (Interface)
-
-# DR VPC Configuration  
-VPC CIDR: 10.1.0.0/16
-Region: us-west-2
-AZs: us-west-2a, us-west-2b
-Configuration: Mirrors production for consistency
-
-# Security Configuration
-Security Groups: 6 (ALB, Web, Database per region)
-NACLs: 3 custom (Public, Private App, Private Data)
-Flow Logs: Enabled for all traffic, 90-day retention
+# Key configuration values
+Production VPC: 10.0.0.0/16 (us-east-1)
+DR VPC: 10.1.0.0/16 (us-west-2)
+Availability Zones: 2 per region
+NAT Gateways: 1 per AZ (4 total)
+Route Tables: 6 custom tables with tier-specific routing
+Security Groups: 6 (3 per region)
+Network ACLs: 3 custom (Public, App, Data)
+VPC Endpoints: S3 Gateway, SSM/EC2Messages/SSMMessages Interface
+Flow Logs: All traffic captured to CloudWatch
 ```
 
-## Challenges & Solutions
+## 🚧 Challenges & Solutions
 
-### Challenge 1: NAT Gateway High Availability vs Cost
-**Problem**: Single NAT Gateway would save ~$45/month but creates single point of failure.
-**Solution**: Deployed NAT Gateway per AZ for production reliability. Accepted higher cost for uptime requirements. In development environments, would use single NAT Gateway.
+### Challenge 1: Complex NACL Rules for Stateless Traffic
+**Solution**: Added ephemeral port ranges (1024-65535) for return traffic. Created detailed inbound/outbound rules per tier. Documented traffic flow patterns for troubleshooting.
 
-### Challenge 2: Security Group Cross-Region References
-**Problem**: Cannot reference security group IDs across regions for VPC peering.
-**Solution**: Used CIDR blocks instead of security group references for cross-region rules. Documented IP ranges clearly for maintenance. Created naming conventions for easy identification.
+### Challenge 2: Cross-Region Security Group References
+**Solution**: Security groups can't reference cross-region. Used CIDR blocks for cross-region access (10.0.11.0/24 → 10.1.11.0/24). Created documentation matrix for IP-based rules.
 
-### Challenge 3: NACL Stateless Nature Causing Issues
-**Problem**: Application responses blocked due to missing ephemeral port rules.
-**Solution**: Added ephemeral port ranges (1024-65535) in both inbound and outbound NACL rules. Tested each tier's connectivity systematically. Created comprehensive rule documentation for future reference.
+### Challenge 3: VPC Endpoint DNS Resolution
+**Solution**: Enabled DNS hostnames and resolution on VPCs. Created endpoint-specific security group. Verified with `nslookup` from private instances.
 
-### Challenge 4: VPC Endpoint Cost Optimization
-**Problem**: Interface endpoints charge ~$7/month per endpoint per AZ.
-**Solution**: Used Gateway endpoints for S3 (free) instead of Interface endpoints. Consolidated Systems Manager endpoints to serve multiple purposes. Only deployed endpoints in AZs where needed.
+### Challenge 4: Route Table Propagation for Peering
+**Solution**: Manually added routes in all route tables (no auto-propagation). Created routing matrix documentation. Tested with cross-region ping after peering.
 
-## Proof It Works
+## ✨ Proof It Works
 
-### Network Connectivity Test Results
+### 🧪 Test Results
 ```bash
-# Cross-subnet connectivity test
-$ ping 10.0.21.5 from 10.0.11.10
-PING 10.0.21.5 56(84) bytes of data.
-64 bytes from 10.0.21.5: icmp_seq=1 ttl=64 time=0.341 ms
+# Cross-region connectivity test
+$ ping 10.1.11.5 -c 4
+PING 10.1.11.5: 56 data bytes
+64 bytes from 10.1.11.5: icmp_seq=0 ttl=64 time=67.2 ms
+64 bytes from 10.1.11.5: icmp_seq=1 ttl=64 time=66.8 ms
 
-# NAT Gateway internet access test (from private subnet)
-$ curl -I https://aws.amazon.com
-HTTP/2 200
-Connection successful via NAT Gateway
-
-# Cross-region VPC peering test
-$ ping 10.1.11.10 from 10.0.11.10
-64 bytes from 10.1.11.10: icmp_seq=1 ttl=64 time=68.2 ms
+# VPC Endpoint test (S3 via private network)
+$ aws s3 ls --endpoint-url https://s3.us-east-1.amazonaws.com
+2025-06-12 08:15:23 terminus-production-data
+2025-06-12 08:15:45 terminus-application-logs
 ```
 
-### Screenshots
-![VPC Resource Map](./screenshots/vpc-resource-map.png)
-*Complete VPC infrastructure with all subnets and routing*
+### 📸 Screenshots
+![VPC Dashboard](./screenshots/vpc-overview.png)
+*Multi-AZ VPC with complete subnet architecture*
 
-![Security Groups](./screenshots/security-groups-configured.png)
-*Layered security group configuration for each tier*
+![VPC Peering](./screenshots/vpc-peering-active.png)
+*Active cross-region peering connection*
 
-![VPC Peering Active](./screenshots/vpc-peering-active.png)
-*Cross-region peering connection established and active*
+![Flow Logs](./screenshots/flow-logs-dashboard.png)
+*VPC Flow Logs capturing all network traffic*
 
-### VPC Flow Logs Query Results
-```sql
-# Top rejected connections (potential security events)
-fields @timestamp, srcaddr, dstaddr, action
-| filter action = "REJECT"
-| stats count() by srcaddr
-| sort count desc
+## 🔧 Testing & Validation
 
-Results show expected behavior with no unauthorized access attempts
-```
-### 📊 Access Matrix Testing
+### Network Connectivity Matrix
 
-|Role|EC2 Launch|EC2 View|S3 Create|S3 Delete|RDS Create|
-|---|---|---|---|---|---|
-|TerminusDeveloperRole|✓ (t2/t3 only)|✓|✓ (dev buckets)|✓ (dev buckets)|✓ (t2/t3 only)|
-|TerminusProductionReadOnlyRole|✗|✓|✗|✗|✗|
+|Source|Destination|Port|Protocol|Result|
+|---|---|---|---|---|
+|Internet|ALB (Public Subnet)|80,443|TCP|✅ Allow|
+|ALB|Web Tier (Private)|80,443|TCP|✅ Allow|
+|Web Tier|Database Tier|3306|TCP|✅ Allow|
+|Database Tier|Internet|All|All|❌ Deny|
+|Production VPC|DR VPC|All|All|✅ Allow (Peering)|
 
-## 🔧 Troubleshooting
+### Security Validation
+- ✅ Database subnets have no internet route
+- ✅ NACLs enforce subnet-level restrictions
+- ✅ Security groups use least-privilege access
+- ✅ VPC endpoints eliminate internet routing for AWS services
 
-📚 **For detailed solutions and additional issues, see the complete [Troubleshooting Guide](./docs/lab-01-troubleshooting.md).**
+**For complete testing procedures, see [Network Testing Checklist](./docs/network-testing-checklist.md).**  
+**For common issues and troubleshooting, see [VPC & Networking Troubleshooting](./docs/lab-02-troubleshooting.md).**
 
-## Next Steps
+## 🚀 Next Steps
 
-- [x] Lab 3: EC2 & Auto Scaling (Application tier deployment)
-- [ ] Implement Transit Gateway for multi-VPC connectivity (future enhancement)
-- [ ] Add Site-to-Site VPN for hybrid cloud scenario
+- [x] Lab 1: IAM & Organizations Foundation
+- [x] Lab 2: VPC & Networking Core
+- [ ] Lab 3: EC2 & Auto Scaling Platform (Network foundation ready!)
+- [ ] Lab 4: S3 & Storage Strategy (VPC endpoints configured!)
+
+### Integration Points Ready
+- ✅ Application subnets ready for EC2 deployment
+- ✅ Database subnets configured for RDS Multi-AZ
+- ✅ Public subnets prepared for load balancers
+- ✅ VPC endpoints ready for private S3/Systems Manager access
 
 ---
 
@@ -183,7 +209,7 @@ Results show expected behavior with no unauthorized access attempts
 | Lab | Component | Status | Documentation |
 |-----|-----------|--------|---------------|
 | 1 | IAM & Organizations | ✅ Complete | [View](/labs/lab-01-iam/README.md) |
-| 2 | VPC & Networking Core | 🚧 In Progress | [View](/labs/lab-02-vpc/README.md) |
+| 2 | VPC & Networking Core | ✅ Complete | **📍You are here** |  <!-- Highlight current --> |
 | 3 | EC2 & Auto Scaling Platform | 📅 Planned | - |
 | 4 | S3 & Storage Strategy | 📅 Planned | - |
 | 5 | RDS & Database Services | 📅 Planned | - |
@@ -199,4 +225,4 @@ Results show expected behavior with no unauthorized access attempts
 ---
 
 *Lab Status: ✅ Complete*  
-*Last Updated: June 11th, 2025*
+*Last Updated: June 12th, 2025*

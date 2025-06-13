@@ -13,9 +13,12 @@ This directory contains all Architecture Decision Records (ADRs) for the Terminu
 
 | ADR | Title | Status | Lab | Date |
 |-----|-------|--------|-----|------|
-| [001](./adr-001-multi-account-strategy.md) | Multi-Account Strategy | Accepted | Lab 1 | 2025-06-11 |
-| [002](./adr-002-scp-strategy.md) | Account Based SCP Strategy | Accepted | Lab 1 | 2025-06-11 |
-| [003](./adr-003-vpc-networking.md) | VPC and Networking Architecture | Proposed | Lab 2 | TBD |
+| [001](./adr-001-multi-account-strategy.md) | Multi-Account Strategy with AWS Organizations | Accepted | Lab 1 | 2025-06-11 |
+| [002](./adr-002-vpc-cidr-allocation-strategy.md) | VPC CIDR Allocation Strategy | Accepted | Lab 2 | 2025-06-12 |
+| [003](./adr-003-network-segmentation-architecture.md) | Network Segmentation Architecture | Accepted | Lab 2 | 2025-06-12 |
+| [004](./adr-004-multi-region-dr-network-design.md) | Multi-Region DR Network Design | Accepted | Lab 2 | 2025-06-12 |
+| [005](./adr-005-network-security-controls-strategy.md) | Network Security Controls Strategy | Accepted | Lab 2 | 2025-06-12 |
+| [006](./adr-006-vpc-endpoints-private-connectivity.md) | VPC Endpoints and Private Connectivity | Accepted | Lab 2 | 2025-06-12 |
 
 ## ADR Process
 1. Copy `adr-template.md` to `adr-NNN-brief-description.md`
@@ -161,3 +164,26 @@ This decision will be implemented in the following labs:
 - [Condition 2]
 - [Condition 3]
 ```
+---
+
+### 📊 Project Navigation
+
+| Lab | Component | Status | Documentation |
+|-----|-----------|--------|---------------|
+| 1 | IAM & Organizations | ✅ Complete | [View](/labs/lab-01-iam/README.md) |
+| 2 | VPC & Networking Core | ✅ Complete | [View](/labs/lab-02-vpc/README.md) |
+| 3 | EC2 & Auto Scaling Platform | 📅 Planned | - |
+| 4 | S3 & Storage Strategy | 📅 Planned | - |
+| 5 | RDS & Database Services | 📅 Planned | - |
+| 6 | Route53 & CloudFront Distribution | 📅 Planned | - |
+| 7 | ELB & High Availability | 📅 Planned | - |
+| 8 | Lambda & API Gateway Services | 📅 Planned | - |
+| 9 | SQS, SNS & EventBridge Messaging | 📅 Planned | - |
+| 10 | CloudWatch & Systems Manager Monitoring | 📅 Planned | - |
+| 11 | CloudFormation Infrastructure as Code | 📅 Planned | - |
+| 12 | Security Services Integration | 📅 Planned | - |
+| 13 | Container Services (ECS/EKS) | 📅 Planned | - |
+
+---
+
+*Last Updated: June 12th, 2025*
