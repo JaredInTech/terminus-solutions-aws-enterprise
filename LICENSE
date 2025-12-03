@@ -1,0 +1,48 @@
+Terminus Solutions AWS Enterprise Architecture - Licensing
+
+This project uses a multi-license approach to balance open collaboration with 
+fair attribution and potential commercial opportunities.
+
+Quick Summary
+
+- Code: MIT License (use freely)
+- Documentation: CC BY-SA 4.0 (attribute required)
+- Diagrams/Designs: CC BY-SA 4.0 (attribute required)
+
+Detailed Licensing
+
+Code Files (MIT License)
+The following are licensed under the MIT License (see LICENSE-CODE):
+- All Terraform files (*.tf)
+- All CloudFormation templates (*.yaml, *.json)
+- All Python scripts (*.py)
+- All shell scripts (*.sh)
+- All configuration files
+
+Documentation (CC BY-SA 4.0)
+The following are licensed under Creative Commons BY-SA 4.0 (see LICENSE-DOCS):
+- All Markdown files (*.md)
+- All architecture decision records (ADRs)
+- All diagrams and visual materials
+- All troubleshooting guides
+- All cost analysis documents
+- All educational content
+
+Attribution Requirements
+
+When using documentation or educational materials from this project:
+
+Based on Terminus Solutions AWS Enterprise Architecture
+by Jared (https://jaredintech.com)
+Licensed under CC BY-SA 4.0
+
+Commercial Use
+
+- Code can be used commercially without attribution (MIT)
+- Documentation can be used commercially WITH attribution (CC BY-SA)
+- For training programs or consulting based on these materials, 
+     please contact: jared@jaredintech.com
+
+
+Copyright (c) 2025 Terminus Solutions - Jared (jaredintech.com)
+Date: 2025-12-01
