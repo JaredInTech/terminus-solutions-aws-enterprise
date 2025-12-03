@@ -207,7 +207,7 @@ Build a production-grade, multi-region network infrastructure with three-tier VP
 ---
 
 ### Lab 3: EC2 & Auto Scaling Platform
-**Status:** 📅 Planned
+**Status:** 🚧 In Progress
 
 Deploy a scalable compute platform with Auto Scaling groups, launch templates, and mixed instance policies.
 
