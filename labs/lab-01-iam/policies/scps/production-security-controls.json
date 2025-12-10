@@ -1,0 +1,51 @@
+{
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"Sid": "DenyRootUserAccess",
+			"Effect": "Deny",
+			"Action": "*",
+			"Resource": "*",
+			"Condition": {
+				"StringEquals": {
+					"aws:PrincipalType": "Root"
+				}
+			}
+		},
+		{
+			"Sid": "DenyUnencryptedStorage",
+			"Effect": "Deny",
+			"Action": [
+				"s3:PutObject",
+				"rds:CreateDBInstance",
+				"ec2:CreateVolume"
+			],
+			"Resource": "*",
+			"Condition": {
+				"Bool": {
+					"aws:SecureTransport": "false"
+				}
+			}
+		},
+		{
+			"Sid": "RequireApprovedRegions",
+			"Effect": "Deny",
+			"Action": "*",
+			"Resource": "*",
+			"Condition": {
+				"StringNotEquals": {
+					"aws:RequestedRegion": [
+						"us-east-1",
+						"us-west-2"
+					]
+				},
+				"ForAllValues:StringNotEquals": {
+					"aws:PrincipalServiceName": [
+						"cloudfront.amazonaws.com",
+						"route53.amazonaws.com"
+					]
+				}
+			}
+		}
+	]
+}

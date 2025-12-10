@@ -1,0 +1,29 @@
+# LinkedIn Blog Post: Labs 1 & 2 Release
+
+**December 03, 2025**
+
+---
+
+Two days ago I introduced Terminus Solutions, a project I've spent 3 months and 600 hours building because I couldn't find what I needed when I started learning cloud: a complete example of enterprise AWS architecture that shows not only the architecture itself (and which buttons to click) but how companies actually think about the cloud.
+
+Today, the first release is live.
+
+✅ Lab 1: IAM & Organizations Foundation 
+Multi-account structure with Production, Development, and Security accounts. Service Control Policies that enforce guardrails organization-wide. Cross-account roles with MFA enforcement. Organization-wide CloudTrail for audit logging.
+
+✅ Lab 2: VPC & Networking Core 
+Multi-region architecture; three-tier subnet design with true database isolation. Redundant NAT Gateways per AZ. Cross-region VPC peering for DR. Defense-in-depth with NACLs and Security Groups. VPC endpoints for private AWS service access.
+
+Each lab includes Architecture Decision Records, architecture diagrams, cost analysis, troubleshooting guides, testing checklists, and implementation proof.
+
+The project now has a home:
+🌐 jaredintech 🐙terminus-solutions
+
+Labs 3-13 roll out over the coming days. Next up: EC2 & Auto Scaling.
+
+Check the comment section for a link to my website and the GitHub repo where this project can be located.
+
+#AWS #CloudComputing #DevOps
+
+---
+

@@ -1,0 +1,206 @@
+#!/bin/bash
+# Terminus Solutions Web Server Configuration
+# Update system
+dnf update -y
+
+# Install required packages (including php-curl for metadata access)
+dnf install -y httpd mod_ssl php php-mysqli php-xml php-gd php-curl git aws-cli
+
+# Install CloudWatch Agent
+wget https://s3.amazonaws.com/amazoncloudwatch-agent/amazon_linux/amd64/latest/amazon-cloudwatch-agent.rpm
+rpm -U ./amazon-cloudwatch-agent.rpm
+
+# Install Systems Manager Agent (usually pre-installed, but ensure latest)
+dnf install -y amazon-ssm-agent
+systemctl enable amazon-ssm-agent
+systemctl start amazon-ssm-agent
+
+# Configure Apache
+systemctl enable httpd
+systemctl start httpd
+
+# Create web application directory structure
+mkdir -p /var/www/html/terminus
+mkdir -p /var/log/terminus
+mkdir -p /opt/terminus/scripts
+
+# Set permissions
+chown -R apache:apache /var/www/html/terminus
+chown -R apache:apache /var/log/terminus
+chmod -R 755 /var/www/html/terminus
+
+# Create landing page
+cat > /var/www/html/index.html << 'EOF'
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Terminus Solutions Web Server</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        h1 { color: #333; }
+        a { color: #0066cc; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <h1>Terminus Solutions Web Server</h1>
+    <p>Visit <a href="/terminus/">/terminus/</a> for the application.</p>
+</body>
+</html>
+EOF
+
+# Create basic web application with IMDSv2 support
+tee /var/www/html/terminus/index.php > /dev/null << 'PHPFILE'
+<?php
+function getInstanceMetadata($path) {
+    // First get the token for IMDSv2
+    $token_url = 'http://169.254.169.254/latest/api/token';
+    $ch = curl_init($token_url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('X-aws-ec2-metadata-token-ttl-seconds: 21600'));
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+    curl_setopt($ch, CURLOPT_TIMEOUT, 2);
+    $token = curl_exec($ch);
+    curl_close($ch);
+    
+    // Now get the actual metadata using the token
+    $metadata_url = 'http://169.254.169.254/latest/meta-data/' . $path;
+    $ch = curl_init($metadata_url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('X-aws-ec2-metadata-token: ' . $token));
+    curl_setopt($ch, CURLOPT_TIMEOUT, 2);
+    $result = curl_exec($ch);
+    curl_close($ch);
+    
+    return $result ?: 'Not available';
+}
+
+$instanceId = getInstanceMetadata('instance-id');
+$az = getInstanceMetadata('placement/availability-zone');
+$instanceType = getInstanceMetadata('instance-type');
+$region = ($az != 'Not available') ? substr($az, 0, -1) : 'Not available';
+
+echo "<html><head><title>Terminus Solutions</title></head><body>";
+echo "<h1>Welcome to Terminus Solutions</h1>";
+echo "<h2>Instance Information</h2>";
+echo "<p><strong>Instance ID:</strong> " . htmlspecialchars($instanceId) . "</p>";
+echo "<p><strong>Availability Zone:</strong> " . htmlspecialchars($az) . "</p>";
+echo "<p><strong>Instance Type:</strong> " . htmlspecialchars($instanceType) . "</p>";
+echo "<p><strong>Region:</strong> " . htmlspecialchars($region) . "</p>";
+echo "<p><strong>Server Time:</strong> " . date('Y-m-d H:i:s T') . "</p>";
+
+// Health check endpoint
+if (isset($_GET['health']) && $_GET['health'] == 'check') {
+    http_response_code(200);
+    echo json_encode(['status' => 'healthy', 'timestamp' => time()]);
+    exit;
+}
+
+echo "</body></html>";
+?>
+PHPFILE
+
+# Create health check script
+cat > /opt/terminus/scripts/health-check.sh << 'EOF'
+#!/bin/bash
+# Health check script for load balancer
+curl -f http://localhost/terminus/index.php?health=check > /dev/null 2>&1
+exit $?
+EOF
+
+chmod +x /opt/terminus/scripts/health-check.sh
+
+# Configure CloudWatch Agent
+mkdir -p /opt/aws/amazon-cloudwatch-agent/etc
+cat > /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json << 'EOF'
+{
+  "metrics": {
+    "namespace": "Terminus/WebServer",
+    "metrics_collected": {
+      "cpu": {
+        "measurement": [
+          "cpu_usage_idle",
+          "cpu_usage_iowait",
+          "cpu_usage_user",
+          "cpu_usage_system"
+        ],
+        "metrics_collection_interval": 60
+      },
+      "disk": {
+        "measurement": [
+          "used_percent"
+        ],
+        "metrics_collection_interval": 60,
+        "resources": [
+          "*"
+        ]
+      },
+      "diskio": {
+        "measurement": [
+          "io_time"
+        ],
+        "metrics_collection_interval": 60,
+        "resources": [
+          "*"
+        ]
+      },
+      "mem": {
+        "measurement": [
+          "mem_used_percent"
+        ],
+        "metrics_collection_interval": 60
+      },
+      "swap": {
+        "measurement": [
+          "swap_used_percent"
+        ],
+        "metrics_collection_interval": 60
+      }
+    }
+  },
+  "logs": {
+    "logs_collected": {
+      "files": {
+        "collect_list": [
+          {
+            "file_path": "/var/log/httpd/access_log",
+            "log_group_name": "/terminus/web/access",
+            "log_stream_name": "{instance_id}/httpd/access",
+            "timestamp_format": "%d/%b/%Y:%H:%M:%S %z"
+          },
+          {
+            "file_path": "/var/log/httpd/error_log",
+            "log_group_name": "/terminus/web/error",
+            "log_stream_name": "{instance_id}/httpd/error"
+          }
+        ]
+      }
+    }
+  }
+}
+EOF
+
+# Start CloudWatch Agent
+/opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
+    -a fetch-config -m ec2 -s \
+    -c file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
+
+# Configure automatic security updates
+cat > /etc/cron.d/security-updates << 'EOF'
+# Automatic security updates
+0 2 * * * root /usr/bin/dnf update --security -y
+EOF
+
+# Tag instance for identification
+INSTANCE_ID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)
+REGION=$(curl -s http://169.254.169.254/latest/meta-data/placement/region)
+aws ec2 create-tags --region $REGION --resources $INSTANCE_ID --tags Key=Role,Value=WebServer Key=Environment,Value=Production
+
+# Create a simple PHP info page for testing
+echo "<?php phpinfo(); ?>" > /var/www/html/info.php
+
+# Restart Apache to ensure all modules are loaded
+systemctl restart httpd
+
+# Signal completion
+echo "Terminus Web Server AMI build completed at $(date)" > /var/log/terminus/build-complete.log

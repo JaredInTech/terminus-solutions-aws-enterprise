@@ -1,0 +1,31 @@
+# LinkedIn Blog Post: Intro
+
+**December 01, 2025**
+
+---
+
+December 01, 2025
+
+When I began my cloud journey I searched extensively for courses, tutorials, videos - anything that would give me a bearing on how AWS and cloud in general applied in practice to real world scenarios and businesses. 
+
+Unfortunately, this search ended in disappointment. So I spent 600 hours over the span of the last 3 months and built it myself. Most AWS projects show what someone built. I wanted to show how an enterprise actually thinks about cloud architecture.
+
+Introducing Terminus Solutions, a complete multi-account AWS infrastructure for a fictional (for the time being) technology consulting firm. But here's what makes it different:
+
+📋 Architecture Decision Records: Every major choice documented with context, alternatives considered, and tradeoffs accepted. Why 4 accounts instead of 2? Why VPC peering over Transit Gateway?
+
+💰 Real Cost Analysis: Not just "it costs money." Full breakdowns by organization size, ROI calculations, optimization strategies, and a 92% cost reduction compared to traditional enterprise tools.
+
+🔧 Operational Readiness: Troubleshooting guides. Testing checklists. Runbooks. Because production isn't just about deploying, it's about Day 2 and beyond.
+
+📚 13 Hands-On Labs From IAM & Organizations through VPC networking, compute, databases, serverless, containers, and security services. Each with diagrams, screenshots, and implementation proof.
+
+Over the coming days, I'll be releasing documentation of this project on GitHub until the series is complete, ending with a full reference architecture for enterprise AWS infrastructure at scale.
+
+Here's what's strange: This type of comprehensive, end-to-end enterprise architecture example is something everyone wants but almost nobody publishes. Tutorials cover individual services. Certifications test isolated concepts. But where do you go to see how it all connects?
+
+That gap is exactly what I wanted this project to fill. Follow along as I release more.
+
+#AWS #CloudComputing #DevOps
+
+---

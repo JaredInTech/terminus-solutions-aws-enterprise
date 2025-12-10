@@ -1,0 +1,48 @@
+# LinkedIn Blog Post: Labs 3 & 4 Release
+
+**December 10, 2025**
+
+---
+
+Last week I released Labs 1 & 2 of Terminus Solutions - the enterprise AWS architecture project I built because I couldn't find what I needed when learning cloud: comprehensive documentation that shows not just what to build, but how companies actually think about infrastructure decisions.
+
+Today, the compute and storage foundations are live.
+
+✅ **Lab 3: EC2 & Auto Scaling Platform**
+Multi-tier compute architecture with custom AMIs and launch template versioning. Auto Scaling Groups with target tracking policies (70% CPU threshold, 300-second warmup). Application Load Balancer integration across multiple AZs. IAM instance profiles for secure AWS service access - no credentials stored on instances. Systems Manager for SSH-free administration. Full CloudWatch integration with custom namespaces.
+
+✅ **Lab 4: S3 & Storage Strategy**
+Multi-purpose bucket architecture designed for different access patterns and security requirements. Static website hosting with CloudFront CDN integration (60% latency reduction). Automated lifecycle policies transitioning objects through Standard → Standard-IA → Glacier (up to 95% cost savings). Cross-region replication to us-west-2 for disaster recovery. Event-driven processing with Lambda for uploads. Transfer Acceleration for global upload optimization.
+
+What makes this different from typical tutorials:
+
+📋 **Architecture Decision Records** - Why target tracking over step scaling? Why three-tier subnets with true database isolation? Why SSE-KMS for application data but SSE-S3 for static content? Every architectural choice documented with alternatives considered and tradeoffs accepted.
+
+💰 **Real Cost Analysis** - Lab 3 baseline runs ~$81/month with detailed breakdowns by component. Lab 4 storage costs ~$11/month with lifecycle optimization projections. Both include scaling scenarios and optimization strategies.
+
+🔧 **Operational Documentation** - Comprehensive troubleshooting guides. What to do when Auto Scaling doesn't trigger. How to debug health check failures. Why your S3 replication isn't starting. Real problems I encountered, real solutions I implemented.
+
+🧪 **Testing Checklists** - Step-by-step validation procedures for every component. Instance profile functionality. Scaling policy verification. Cross-region replication testing. Security control validation.
+
+The infrastructure is building on itself now. EC2 instance profiles are configured and ready for S3 access. CloudFront distributions are positioned for Route53 integration. Auto Scaling Groups are integrated with the load balancer. Each lab creates integration points for what comes next.
+
+Labs 5-6 (RDS & Route53/CloudFront) are currently in progress - rolling out over the coming days.
+
+🌐 jaredintech | 🐙 terminus-solutions
+
+Check the comment section for direct links to the GitHub repository and project documentation.
+
+#AWS #CloudComputing #DevOps
+
+---
+
+🔗 Project Links:
+
+📂 GitHub: https://github.com/JaredInTech/terminus-solutions
+🌐 Website: https://www.jaredintech.com
+
+📚 Previous posts in this series:
+- Intro: https://bit.ly/4pvS7Sz - Project overview & what makes it different
+- Labs 1-2: http://bit.ly/48GaqyB - IAM/Organizations & VPC/Networking
+
+Labs 5-6 coming soon.
