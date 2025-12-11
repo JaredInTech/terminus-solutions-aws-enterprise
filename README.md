@@ -74,8 +74,6 @@ This repository contains the complete implementation of an enterprise AWS infras
 
 ## 📊 Project Navigation
 
-### 📊 Project Navigation
-
 | Lab | Component | Status | Documentation |
 |-----|-----------|--------|---------------|
 | 1 | IAM & Organizations | ✅ Complete | [View](/labs/lab-01-iam/README.md) |
