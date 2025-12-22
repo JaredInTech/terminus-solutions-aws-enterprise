@@ -31,7 +31,7 @@ See LICENSE-DOCS for details
 - [Connect With Me](#-connect-with-me)
 - [License](#license)
 - [Acknowledgments](#-acknowledgments)
-s
+
 ## Project Highlights
 
 - **Enterprise-Scale Architecture**: Multi-account, multi-region infrastructure supporting 99.99% availability
