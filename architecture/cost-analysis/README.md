@@ -10,7 +10,7 @@ See LICENSE-DOCS for details
 ## Table of Contents
 
 - [Cost Analysis Overview](#cost-analysis-overview)
-- [Current Implementation Costs (Labs 1-4)](#current-implementation-costs-labs-1-4)
+- [Current Implementation Costs (Labs 1-6)](#current-implementation-costs-labs-1-6)
 - [Actual Infrastructure Costs](#actual-infrastructure-costs)
 - [Cost Optimization Techniques Implemented](#cost-optimization-techniques-implemented)
   - [Storage Lifecycle Management](#1-storage-lifecycle-management-94-savings-on-backup-data)
@@ -40,7 +40,7 @@ This project demonstrates enterprise-grade AWS architecture with intentional cos
 
 ---
 
-## Current Implementation Costs (Labs 1-4)
+## Current Implementation Costs (Labs 1-6)
 
 ### Completed Labs Cost Summary
 
@@ -50,7 +50,9 @@ This project demonstrates enterprise-grade AWS architecture with intentional cos
 | **Lab 2** | VPC & Networking | ~$245 | ~$2,946 | NAT Gateways (primary driver) |
 | **Lab 3** | EC2 & Auto Scaling | ~$81 | ~$972 | 2x t3.small + ALB + EBS |
 | **Lab 4** | S3 & Storage | ~$11 | ~$137 | Mixed storage classes + CloudFront |
-| **Total** | **Labs 1-4** | **~$345** | **~$4,148** | Production-ready foundation |
+| **Lab 5** | RDS & Database Services | ~$65 | ~$780 | Multi-AZ RDS + backups + secrets |
+| **Lab 6** | Route53 & CloudFront | ~$15 | ~$180 | DNS queries + CDN + WAF (basic) |
+| **Total** | **Labs 1-6** | **~$425** | **~$5,108** | Production-ready foundation |
 
 ### Lab 1: IAM & Organizations Cost Breakdown
 ```
@@ -146,6 +148,90 @@ Lifecycle Optimization Savings:
 └── Monthly Savings: ~$35 (76% reduction)
 ```
 
+### Lab 5: RDS & Database Services Cost Breakdown
+```
+Database Infrastructure (Production-Ready):
+├── RDS MySQL (db.t3.medium Multi-AZ): $48.96/month
+│   ├── Primary instance: $24.48
+│   ├── Standby instance: $24.48
+│   └── Failover: Automatic
+├── RDS Storage (50GB gp3): $5.75/month
+│   ├── Storage: $0.115/GB-month
+│   └── IOPS: Included with gp3
+├── Automated Backups: $2.50/month
+│   ├── Retention: 7 days
+│   └── Storage: ~50GB backup data
+├── Secrets Manager: $0.80/month
+│   ├── 2 secrets: $0.80
+│   └── API calls: Negligible
+├── Enhanced Monitoring: $0.00/month
+│   └── Included (basic granularity)
+├── Performance Insights: $0.00/month
+│   └── Free tier (7-day retention)
+├── Parameter Groups: $0.00/month
+│   └── Always free
+├── Subnet Groups: $0.00/month
+│   └── Always free
+├── KMS Encryption: $1.00/month
+│   └── Customer-managed key
+├── CloudWatch Logs: $2.00/month
+│   └── Error and slow query logs
+├── Data Transfer: $4.00/month
+│   └── Cross-AZ replication
+└── Total: ~$65.01/month
+
+Cost Scaling Options:
+├── Dev/Test (Single-AZ db.t3.micro): ~$12/month
+├── Production (Multi-AZ db.t3.medium): ~$65/month
+├── High-Performance (db.r6g.large): ~$250/month
+└── Enterprise (Aurora Serverless v2): ~$100-500/month (variable)
+
+Read Replica Costs (Optional):
+├── Same-region replica: +$24.48/month
+├── Cross-region replica: +$30/month (includes transfer)
+└── Use case: Read scaling, DR warm standby
+```
+
+### Lab 6: Route53 & CloudFront Distribution Cost Breakdown
+```
+DNS & CDN Infrastructure:
+├── Route 53 Hosted Zone: $0.50/month
+│   └── Per hosted zone
+├── Route 53 DNS Queries: $0.80/month
+│   ├── Standard queries: ~2M/month
+│   └── Rate: $0.40 per million
+├── Route 53 Health Checks: $1.50/month
+│   ├── 3 HTTPS health checks
+│   └── Rate: $0.50 each
+├── CloudFront Distribution: $8.50/month
+│   ├── Data transfer (100GB): $8.50
+│   └── Rate: $0.085/GB (first 10TB)
+├── ACM Certificates: $0.00/month
+│   └── Public certificates are FREE
+├── WAF Web ACL (Basic): $6.00/month
+│   ├── Web ACL: $5.00
+│   ├── Rules (1 custom): $1.00
+│   └── Managed rules: FREE (Core Rule Set)
+├── WAF Requests: $0.60/month
+│   ├── ~1M requests/month
+│   └── Rate: $0.60 per million
+├── Lambda@Edge (Optional): $0.00/month
+│   └── Covered by free tier initially
+└── Total: ~$17.90/month
+
+Cost Scaling by Traffic:
+├── Low traffic (<100GB): ~$15/month
+├── Medium traffic (1TB): ~$100/month
+├── High traffic (10TB): ~$900/month
+└── Enterprise (100TB+): Custom pricing available
+
+Price Class Optimization:
+├── All Edge Locations: Full price
+├── Price Class 200: ~15% savings
+├── Price Class 100: ~30% savings (US/Europe only)
+└── Choose based on audience geography
+```
+
 ---
 
 ## Actual Infrastructure Costs
@@ -156,13 +242,14 @@ Lifecycle Optimization Savings:
 |-----------|-------------|------------|---------------------|
 | **ALB** | ~$18/mo | ~$25-40/mo | Right-sized LCU allocation |
 | **EC2 (Auto Scaling Group)** | ~$15/mo (t3.micro) | ~$60-150/mo | Spot-ready ASG configuration |
-| **RDS MySQL** | ~$15/mo (Single-AZ) | ~$30-60/mo (Multi-AZ) | GP3 storage, auto-scaling |
+| **RDS MySQL** | ~$15/mo (Single-AZ) | ~$65-120/mo (Multi-AZ) | GP3 storage, auto-scaling |
 | **S3 + CloudFront** | ~$5-10/mo | ~$15-50/mo | Lifecycle policies, caching |
-| **Route 53** | ~$1-2/mo | ~$2-5/mo | Alias records (free queries) |
+| **Route 53 + CDN** | ~$5-10/mo | ~$15-100/mo | Alias records, cache optimization |
+| **WAF** | ~$6/mo | ~$50-400/mo | Managed rules, bot control |
 | **NAT Gateway** | ~$32/mo | ~$32-65/mo | VPC endpoints reduce traffic |
 | **CloudWatch** | ~$3-5/mo | ~$10-20/mo | Custom metrics, log retention |
 | **Secrets Manager** | ~$1/mo | ~$2-5/mo | Consolidated secrets |
-| **Total Estimate** | **~$90-100/mo** | **~$200-400/mo** | |
+| **Total Estimate** | **~$100-120/mo** | **~$275-950/mo** | |
 
 *Costs vary based on traffic, data transfer, and region. Estimates based on us-east-1 pricing as of 2025.*
 
@@ -194,23 +281,26 @@ Example: 500GB monthly backups
 - **Target Tracking Scaling**: Automatic right-sizing based on CPU utilization
 
 ### 3. Network Cost Reduction
-- **VPC Endpoints**: S3 Gateway endpoint eliminates NAT charges for S3 traffic
-- **CloudFront Caching**: 80-90% cache hit ratio reduces origin requests
-- **Regional Data Transfer**: Architecture optimized for minimal cross-AZ traffic
-- **IPv6 Ready**: Dual-stack configuration avoids $0.005/hr public IPv4 charges
+- **VPC Endpoints**: Gateway endpoints for S3/DynamoDB (free vs. NAT Gateway charges)
+- **NAT Gateway Consolidation**: Single NAT per AZ minimum, not per subnet
+- **Cross-AZ Awareness**: Data processing stays within AZ when possible
+- **VPC Flow Logs Sampling**: Capture 10% for analysis, reduce log costs
 
 ### 4. Database Optimization
 - **GP3 Storage**: Better price/performance than GP2 (20% cost reduction)
 - **Storage Auto-Scaling**: Prevents over-provisioning while avoiding outages
 - **Performance Insights**: Free tier sufficient for optimization analysis
 - **Read Replica Ready**: Architecture supports horizontal read scaling
+- **Multi-AZ Only When Needed**: Single-AZ for dev, Multi-AZ for production
+- **Secrets Manager Consolidation**: Group related credentials to reduce per-secret costs
 
 ### 5. CDN & Caching Strategy
 - **CloudFront Price Class**: Configurable to limit edge locations by budget
 - **Origin Shield**: Optional layer to reduce origin load (cost vs. performance trade-off)
 - **Cache Behaviors**: Static assets cached 1 year, dynamic content appropriately short
 - **Compression**: Gzip/Brotli reduces data transfer costs
-- **Transfer Acceleration**: Only charges when faster than standard transfer
+- **Alias Records**: Free DNS queries for AWS resources vs. standard query costs
+- **Cache Hit Optimization**: Target 80%+ cache hit ratio to reduce origin costs
 
 ---
 
@@ -218,10 +308,10 @@ Example: 500GB monthly backups
 
 | Traffic Level | Monthly Users | Estimated Monthly Cost | Key Scaling Changes |
 |---------------|---------------|------------------------|---------------------|
-| **Development** | < 1,000 | ~$90-120 | Single instance, Single-AZ RDS |
-| **Startup** | 1,000-10,000 | ~$200-400 | Multi-AZ RDS, 2+ EC2 instances |
-| **Growth** | 10,000-100,000 | ~$500-1,500 | Reserved instances, larger RDS |
-| **Scale** | 100,000+ | ~$2,000-5,000+ | Aurora Serverless, ElastiCache |
+| **Development** | < 1,000 | ~$100-150 | Single instance, Single-AZ RDS |
+| **Startup** | 1,000-10,000 | ~$250-500 | Multi-AZ RDS, 2+ EC2 instances |
+| **Growth** | 10,000-100,000 | ~$600-1,500 | Reserved instances, read replicas, CDN |
+| **Scale** | 100,000+ | ~$2,000-5,000+ | Aurora Serverless, ElastiCache, full WAF |
 
 ### Cost Progression by Organization Size
 
@@ -230,25 +320,28 @@ Small Organization (Single Region):
 ├── Compute: $63/month (2x t3.small, basic ALB)
 ├── Network: $45/month (1 NAT Gateway + endpoints)
 ├── Storage: $15/month (200GB mixed classes)
+├── Database: $25/month (Single-AZ db.t3.micro)
+├── DNS/CDN: $12/month (basic CloudFront)
 ├── Monitoring: $5/month
-└── Total: ~$128/month ($1,536/year)
+└── Total: ~$165/month ($1,980/year)
 
 Medium Organization (Multi-AZ HA):
 ├── Compute: $182/month (ASG 2-6 instances, HA ALB)
 ├── Network: $131/month (2 NAT Gateways + endpoints)
 ├── Storage: $35/month (1TB mixed classes)
-├── Database: $60/month (RDS Multi-AZ)
+├── Database: $95/month (Multi-AZ + read replica)
+├── DNS/CDN: $85/month (CloudFront + WAF)
 ├── Monitoring: $15/month
-└── Total: ~$423/month ($5,076/year)
+└── Total: ~$543/month ($6,516/year)
 
 Enterprise Organization (Multi-Region):
 ├── Compute: $650/month (multi-region ASG, HA)
 ├── Network: $245/month (4 NAT Gateways, VPC peering)
 ├── Storage: $120/month (5TB with replication)
-├── Database: $300/month (Aurora Multi-Region)
-├── CDN: $100/month (global CloudFront)
+├── Database: $450/month (Aurora Multi-Region)
+├── DNS/CDN: $350/month (global CloudFront, full WAF)
 ├── Monitoring: $50/month
-└── Total: ~$1,465/month ($17,580/year)
+└── Total: ~$1,865/month ($22,380/year)
 ```
 
 ---
@@ -313,6 +406,46 @@ AWS S3 + Lifecycle (3-Year TCO for 50TB):
 Savings: 91% ($308,000 over 3 years)
 ```
 
+### Database Infrastructure Comparison
+```
+Traditional Database (3-Year TCO):
+├── Oracle/SQL Server licenses: $150,000
+├── Hardware (HA cluster): $80,000
+├── SAN storage: $50,000
+├── Backup infrastructure: $30,000
+├── DBA staff (portion): $180,000
+└── Total: $490,000
+
+AWS RDS Multi-AZ (3-Year TCO):
+├── RDS instances (Multi-AZ): $21,060
+├── Storage (gp3): $2,070
+├── Backups: $900
+├── Secrets Manager: $29
+└── Total: $24,059
+
+Savings: 95% ($465,941 over 3 years)
+```
+
+### CDN & DNS Comparison
+```
+Traditional CDN (3-Year TCO - 10TB/month):
+├── Akamai/enterprise CDN: $180,000
+├── DDoS protection: $60,000
+├── WAF appliances: $90,000
+├── DNS services: $12,000
+├── SSL certificates: $3,000
+└── Total: $345,000
+
+AWS CloudFront + Route53 + WAF (3-Year TCO):
+├── CloudFront: $30,600
+├── Route 53: $540
+├── WAF: $2,160
+├── ACM certificates: $0
+└── Total: $33,300
+
+Savings: 90% ($311,700 over 3 years)
+```
+
 ---
 
 ## Cost Monitoring and Governance
@@ -326,7 +459,9 @@ Monthly Budget Alerts:
   
 Service-Specific Alerts:
   - EC2: $100/month threshold
+  - RDS: $100/month threshold
   - NAT Gateway: $150/month threshold
+  - CloudFront: $50/month threshold
   - Data Transfer: $50/month threshold
   - S3: $25/month threshold
 ```
@@ -344,57 +479,54 @@ aws ce create-anomaly-monitor \
 # Create subscription for alerts
 aws ce create-anomaly-subscription \
   --anomaly-subscription '{
-    "SubscriptionName": "cost-alerts",
-    "Threshold": 10,
-    "Frequency": "DAILY",
-    "MonitorArnList": ["arn:aws:ce::123456789012:anomalymonitor/abc123"],
-    "Subscribers": [{"Type": "EMAIL", "Address": "alerts@terminus.solutions"}]
+    "SubscriptionName": "terminus-cost-alerts",
+    "MonitorArnList": ["MONITOR_ARN"],
+    "Subscribers": [
+      {
+        "Type": "EMAIL",
+        "Address": "cloud-costs@terminus.solutions"
+      }
+    ],
+    "Threshold": 20
   }'
-```
-
-### Cost Explorer Queries
-```bash
-# Get monthly costs by service
-aws ce get-cost-and-usage \
-  --time-period Start=2025-12-01,End=2025-12-31 \
-  --granularity MONTHLY \
-  --metrics "UnblendedCost" \
-  --group-by Type=DIMENSION,Key=SERVICE
-
-# Get EC2 costs by instance type
-aws ce get-cost-and-usage \
-  --time-period Start=2025-12-01,End=2025-12-31 \
-  --granularity MONTHLY \
-  --filter '{
-    "Dimensions": {
-      "Key": "SERVICE",
-      "Values": ["Amazon Elastic Compute Cloud - Compute"]
-    }
-  }' \
-  --group-by Type=DIMENSION,Key=INSTANCE_TYPE
 ```
 
 ---
 
 ## Further Optimization Opportunities
 
-### Immediate Savings (Quick Wins)
-| Opportunity | Potential Savings | Implementation Effort |
-|-------------|-------------------|----------------------|
-| Reserved Instances (1-year) | 40-60% on EC2 | Low |
-| Savings Plans (Compute) | 30-40% on compute | Low |
-| S3 Intelligent-Tiering | 20-40% on storage | Low |
-| Spot Instances (dev/test) | Up to 90% | Medium |
-| Right-sizing (after metrics) | 20-30% | Medium |
+### Reserved Instances / Savings Plans (40-72% Savings)
+```
+Current On-Demand Costs:
+├── EC2 (2x t3.small): $30.96/month
+├── RDS (db.t3.medium Multi-AZ): $48.96/month
+└── Total: $79.92/month
 
-### Future Optimizations
-| Opportunity | Potential Savings | When to Implement |
-|-------------|-------------------|-------------------|
-| Graviton Instances (ARM) | 20-40% | After baseline established |
-| Aurora Serverless v2 | Variable (pay per use) | With database workload |
-| Lambda@Edge | Reduce origin requests | With high CDN traffic |
-| ElastiCache | Reduce database load | With read-heavy workload |
-| NAT Gateway Consolidation | $65+/month | With Transit Gateway |
+With 1-Year Reserved/Savings Plan:
+├── EC2 Savings Plan: $18.57/month (40% off)
+├── RDS Reserved: $29.38/month (40% off)
+└── Total: $47.95/month
+
+Annual Savings: $383.64
+```
+
+### Spot Instances for Non-Critical Workloads
+```
+Web Tier with Spot (Mixed Instance Policy):
+├── 2 On-Demand (baseline): $30.96/month
+├── 2 Spot (burst capacity): $6.19/month (80% discount)
+└── Potential Monthly Savings: $24.77
+```
+
+### S3 Intelligent-Tiering
+```
+For Unpredictable Access Patterns:
+├── Standard: $0.023/GB
+├── Intelligent-Tiering (Frequent): $0.023/GB
+├── Intelligent-Tiering (Infrequent): $0.0125/GB
+├── Monitoring Fee: $0.0025 per 1,000 objects
+└── Benefit: Automatic optimization without lifecycle management
+```
 
 ---
 
@@ -402,18 +534,23 @@ aws ce get-cost-and-usage \
 
 ### Detailed Cost Analysis Documents
 
-| Document | Description | Labs Covered |
-|----------|-------------|--------------|
-| [Baseline Services](./baseline-costs.md) | IAM, Organizations, CloudTrail, Config | Lab 1 |
-| [Networking Services](./network-costs.md) | VPC, NAT Gateways, VPC Endpoints, Peering | Lab 2 |
-| [Compute Services](./compute-costs.md) | EC2, Auto Scaling, ALB, EBS, CloudWatch | Lab 3 |
-| [Storage Services](./storage-costs.md) | S3, Glacier, CloudFront, Replication | Lab 4 |
+| Document | Services Covered | Lab |
+|----------|------------------|-----|
+| [Baseline Costs](./baseline-costs.md) | Organizations, IAM, CloudTrail, CloudWatch | Lab 1 |
+| [Network Costs](./network-costs.md) | VPC, NAT Gateway, Endpoints, Peering | Lab 2 |
+| [Compute Costs](./compute-costs.md) | EC2, Auto Scaling, ALB, EBS, CloudWatch | Lab 3 |
+| [Storage Costs](./storage-costs.md) | S3, Glacier, CloudFront, Replication | Lab 4 |
+| [Database Costs](./database-costs.md) | RDS, Aurora, Secrets Manager, Backups | Lab 5 |
+| [CDN Costs](./cdn-costs.md) | Route53, CloudFront, WAF, ACM, Lambda@Edge | Lab 6 |
 
 ### Upcoming Cost Analysis (Planned Labs)
-- **Database Services** - RDS, Aurora, DynamoDB (Lab 5)
-- **DNS & CDN** - Route53, CloudFront advanced (Lab 6)
-- **Serverless** - Lambda, API Gateway (Lab 8)
-- **Container Services** - ECS, EKS, Fargate (Lab 13)
+- **Load Balancing** - ALB/NLB advanced configurations (Lab 7)
+- **Serverless** - Lambda, API Gateway, Step Functions (Lab 8)
+- **Messaging** - SQS, SNS, EventBridge (Lab 9)
+- **Monitoring** - CloudWatch advanced, X-Ray, Systems Manager (Lab 10)
+- **Infrastructure as Code** - CloudFormation, Terraform (Lab 11)
+- **Security Services** - GuardDuty, Security Hub, Config (Lab 12)
+- **Container Services** - ECS, EKS, Fargate, ECR (Lab 13)
 
 ---
 
@@ -427,7 +564,10 @@ aws ce get-cost-and-usage \
 - [ ] Validate Reserved Instance/Savings Plan coverage
 - [ ] Review NAT Gateway data processing charges
 - [ ] Check CloudWatch log retention policies
-- [ ] Compare actual vs budgeted spend
+- [ ] Verify RDS storage auto-scaling thresholds
+- [ ] Review Route 53 health check necessity
+- [ ] Analyze WAF rule effectiveness vs. cost
+- [ ] Compare actual vs. budgeted spend
 - [ ] Identify candidates for Spot Instance migration
 
 ---
@@ -436,12 +576,12 @@ aws ce get-cost-and-usage \
 
 | Lab | Component | Status | Documentation |
 |-----|-----------|--------|---------------|
-| 1 | IAM & Organizations | ✅ Complete | [View](./lab-01-iam/README.md) |
-| 2 | VPC & Networking Core | ✅ Complete | [View](./lab-02-vpc/README.md) |
-| 3 | EC2 & Auto Scaling Platform | ✅ Complete | [View](./lab-03-ec2/README.md) |
-| 4 | S3 & Storage Strategy | ✅ Complete | [View](./lab-04-s3/README.md) |
-| 5 | RDS & Database Services | 📅 Planned | - |
-| 6 | Route53 & CloudFront Distribution | 📅 Planned | - |
+| 1 | IAM & Organizations | ✅ Complete | [View](/labs/lab-01-iam/README.md) |
+| 2 | VPC & Networking Core | ✅ Complete | [View](/labs/lab-02-vpc/README.md) |
+| 3 | EC2 & Auto Scaling Platform | ✅ Complete | [View](/labs/lab-03-ec2/README.md) |
+| 4 | S3 & Storage Strategy | ✅ Complete | [View](/labs/lab-04-s3/README.md) |
+| 5 | RDS & Database Services | ✅ Complete | [View](/labs/lab-05-rds/README.md) |
+| 6 | Route53 & CloudFront Distribution | ✅ Complete | [View](/labs/lab-06-route53-cloudfront/README.md) |
 | 7 | ELB & High Availability | 📅 Planned | - |
 | 8 | Lambda & API Gateway Services | 📅 Planned | - |
 | 9 | SQS, SNS & EventBridge Messaging | 📅 Planned | - |
@@ -450,4 +590,4 @@ aws ce get-cost-and-usage \
 | 12 | Security Services Integration | 📅 Planned | - |
 | 13 | Container Services (ECS/EKS) | 📅 Planned | - |
 
-*Last Updated: December 10, 2025*
+*Last Updated: December 22, 2025*

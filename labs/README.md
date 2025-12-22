@@ -230,90 +230,180 @@ Deploy a scalable compute platform with Auto Scaling groups, launch templates, m
 Implement a comprehensive storage strategy with multi-purpose bucket architecture, lifecycle policies, cross-region replication, and CDN integration.
 
 **Key Outcomes:**
-- Multi-purpose bucket architecture for different access patterns
-- Static website hosting with CloudFront CDN (60% latency reduction)
-- Automated lifecycle policies (Standard → Standard-IA → Glacier, up to 95% savings)
-- Cross-region replication to us-west-2 for disaster recovery
-- Event-driven processing with Lambda for uploads
-- Transfer Acceleration for global upload optimization
+- Multi-purpose bucket architecture (static, application, backup, logs)
+- Lifecycle policies with intelligent tiering
+- Cross-region replication for disaster recovery
+- CloudFront distribution with Origin Access Control
+- S3 event notifications with Lambda processing
+- Transfer Acceleration for global uploads
+- Comprehensive encryption strategy (SSE-S3, SSE-KMS)
 
 [View Lab 4 →](./lab-04-s3/README.md)
 
 ---
 
 ### Lab 5: RDS & Database Services
-**Status:** 📅 Planned
+**Status:** ✅ Complete
 
-Configure managed database services with RDS Multi-AZ deployments, read replicas, and automated backups.
+Deploy enterprise-grade relational database services with Multi-AZ high availability, read replicas for performance scaling, automated backups, and comprehensive security controls.
+
+**Key Outcomes:**
+- MySQL RDS with Multi-AZ deployment for high availability
+- Read replicas for read-heavy workload scaling
+- Automated backups with point-in-time recovery
+- Custom parameter groups for performance tuning
+- DB subnet groups for network isolation
+- Secrets Manager integration for credential management
+- Enhanced monitoring and Performance Insights
+- Encryption at rest with KMS
+
+[View Lab 5 →](./lab-05-rds/README.md)
 
 ---
 
-### Lab 6: Route53 & CloudFront Distribution
-**Status:** 📅 Planned
+### Lab 6: Route 53 & CloudFront Distribution
+**Status:** ✅ Complete
 
-Set up global DNS and content delivery with Route53 hosted zones, health checks, and CloudFront distributions.
+Implement global DNS management and content delivery with Route 53 hosted zones, health checks, multiple routing policies, CloudFront CDN, and Web Application Firewall integration.
+
+**Key Outcomes:**
+- Route 53 hosted zone with enterprise DNS management
+- Health checks with automated failover
+- Multiple routing policies (latency, failover, geolocation, weighted)
+- SSL/TLS certificate management with ACM
+- CloudFront distribution with global edge locations
+- Origin Access Control for secure S3 access
+- Custom cache behaviors for different content types
+- Lambda@Edge functions for security header injection
+- Web Application Firewall with managed rule groups
+- DDoS protection through AWS Shield
+
+[View Lab 6 →](./lab-06-route53-cloudfront/README.md)
 
 ---
 
 ### Lab 7: ELB & High Availability
 **Status:** 📅 Planned
 
-Implement load balancing with Application Load Balancers, target groups, and health checks.
+Implement Application Load Balancers with advanced routing, target groups, and health monitoring.
+
+**Planned Outcomes:**
+- Application Load Balancer configuration
+- Path-based and host-based routing
+- Target groups with health checks
+- SSL/TLS termination
+- Integration with Auto Scaling
+
+[View Lab 7 →](./lab-07-elb/README.md) *(Coming Soon)*
 
 ---
 
 ### Lab 8: Lambda & API Gateway Services
 **Status:** 📅 Planned
 
-Build serverless applications with Lambda functions, API Gateway, and event-driven architectures.
+Build serverless applications with Lambda functions and API Gateway endpoints.
+
+**Planned Outcomes:**
+- Lambda function development and deployment
+- API Gateway REST and HTTP APIs
+- Lambda layers and custom runtimes
+- Event-driven architectures
+- VPC integration for private resources
+
+[View Lab 8 →](./lab-08-lambda-api/README.md) *(Coming Soon)*
 
 ---
 
 ### Lab 9: SQS, SNS & EventBridge Messaging
 **Status:** 📅 Planned
 
-Create decoupled architectures with message queues, notifications, and event buses.
+Implement decoupled messaging patterns with queues, topics, and event buses.
+
+**Planned Outcomes:**
+- SQS standard and FIFO queues
+- SNS topics with multiple subscribers
+- EventBridge event bus and rules
+- Dead letter queues and retry patterns
+- Cross-account messaging
+
+[View Lab 9 →](./lab-09-messaging/README.md) *(Coming Soon)*
 
 ---
 
 ### Lab 10: CloudWatch & Systems Manager Monitoring
 **Status:** 📅 Planned
 
-Establish comprehensive observability with CloudWatch dashboards, alarms, and Systems Manager automation.
+Build comprehensive monitoring, alerting, and operational management capabilities.
+
+**Planned Outcomes:**
+- CloudWatch dashboards and alarms
+- Custom metrics and log insights
+- Systems Manager automation
+- Parameter Store and Secrets Manager
+- Incident response runbooks
+
+[View Lab 10 →](./lab-10-monitoring/README.md) *(Coming Soon)*
 
 ---
 
 ### Lab 11: CloudFormation Infrastructure as Code
 **Status:** 📅 Planned
 
-Convert manual configurations to Infrastructure as Code with CloudFormation templates and nested stacks.
+Automate infrastructure deployment with CloudFormation templates and nested stacks.
+
+**Planned Outcomes:**
+- CloudFormation template development
+- Nested stacks and cross-stack references
+- Change sets and drift detection
+- Custom resources with Lambda
+- CI/CD integration
+
+[View Lab 11 →](./lab-11-cloudformation/README.md) *(Coming Soon)*
 
 ---
 
 ### Lab 12: Security Services Integration
 **Status:** 📅 Planned
 
-Enhance security posture with GuardDuty, Security Hub, Config, and WAF.
+Implement comprehensive security monitoring and threat detection.
+
+**Planned Outcomes:**
+- GuardDuty threat detection
+- Security Hub aggregation
+- AWS Config compliance rules
+- Inspector vulnerability scanning
+- Automated remediation
+
+[View Lab 12 →](./lab-12-security/README.md) *(Coming Soon)*
 
 ---
 
 ### Lab 13: Container Services (ECS/EKS)
 **Status:** 📅 Planned
 
-Deploy containerized workloads with ECS Fargate and EKS for Kubernetes orchestration.
+Deploy containerized workloads with ECS and EKS orchestration.
+
+**Planned Outcomes:**
+- ECS cluster with Fargate
+- EKS managed Kubernetes
+- ECR container registry
+- Service mesh with App Mesh
+- Container security and monitoring
+
+[View Lab 13 →](./lab-13-containers/README.md) *(Coming Soon)*
 
 ---
 
-### 📊 Project Navigation
+## 📊 Project Navigation
 
 | Lab | Component | Status | Documentation |
 |-----|-----------|--------|---------------|
-| 1 | IAM & Organizations | ✅ Complete | [View](./lab-01-iam/README.md) |
-| 2 | VPC & Networking Core | ✅ Complete | [View](./lab-02-vpc/README.md) |
-| 3 | EC2 & Auto Scaling Platform | ✅ Complete | [View](./lab-03-ec2/README.md) |
-| 4 | S3 & Storage Strategy | ✅ Complete | [View](./lab-04-s3/README.md) |
-| 5 | RDS & Database Services | 📅 Planned | - |
-| 6 | Route53 & CloudFront Distribution | 📅 Planned | - |
+| 1 | IAM & Organizations | ✅ Complete | [View](/labs/lab-01-iam/README.md) |
+| 2 | VPC & Networking Core | ✅ Complete | [View](/labs/lab-02-vpc/README.md) |
+| 3 | EC2 & Auto Scaling Platform | ✅ Complete | [View](/labs/lab-03-ec2/README.md) |
+| 4 | S3 & Storage Strategy | ✅ Complete | [View](/labs/lab-04-s3/README.md) |
+| 5 | RDS & Database Services | ✅ Complete | [View](/labs/lab-05-rds/README.md) |
+| 6 | Route53 & CloudFront Distribution | ✅ Complete | [View](/labs/lab-06-route53-cloudfront/README.md) |
 | 7 | ELB & High Availability | 📅 Planned | - |
 | 8 | Lambda & API Gateway Services | 📅 Planned | - |
 | 9 | SQS, SNS & EventBridge Messaging | 📅 Planned | - |
@@ -322,4 +412,4 @@ Deploy containerized workloads with ECS Fargate and EKS for Kubernetes orchestra
 | 12 | Security Services Integration | 📅 Planned | - |
 | 13 | Container Services (ECS/EKS) | 📅 Planned | - |
 
-*Last Updated: December 10, 2025*
+*Last Updated: December 22, 2025*

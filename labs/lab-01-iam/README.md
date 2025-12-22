@@ -240,8 +240,8 @@ $ aws sts assume-role \
 | 2 | VPC & Networking Core | ✅ Complete | [View](/labs/lab-02-vpc/README.md) |
 | 3 | EC2 & Auto Scaling Platform | ✅ Complete | [View](/labs/lab-03-ec2/README.md) |
 | 4 | S3 & Storage Strategy | ✅ Complete | [View](/labs/lab-04-s3/README.md) |
-| 5 | RDS & Database Services | 📅 Planned | - |
-| 6 | Route53 & CloudFront Distribution | 📅 Planned | - |
+| 5 | RDS & Database Services | ✅ Complete | [View](/labs/lab-05-rds/README.md) |
+| 6 | Route53 & CloudFront Distribution | ✅ Complete | [View](/labs/lab-06-route53-cloudfront/README.md) |
 | 7 | ELB & High Availability | 📅 Planned | - |
 | 8 | Lambda & API Gateway Services | 📅 Planned | - |
 | 9 | SQS, SNS & EventBridge Messaging | 📅 Planned | - |
@@ -250,4 +250,4 @@ $ aws sts assume-role \
 | 12 | Security Services Integration | 📅 Planned | - |
 | 13 | Container Services (ECS/EKS) | 📅 Planned | - |
 
-*Last Updated: December 10, 2025*
+*Last Updated: December 22, 2025*

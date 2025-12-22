@@ -46,25 +46,38 @@ This directory contains all Architecture Decision Records (ADRs) for the Terminu
 | [015](./adr-015-cross-region-data-replication.md) | Cross-Region Data Replication | Accepted | Lab 4 | 2025-12-10 |
 | [016](./adr-016-event-driven-storage-processing.md) | Event-Driven Storage Processing | Accepted | Lab 4 | 2025-12-10 |
 
-### Application Services (Labs 5-10)
+### Database & Content Delivery (Labs 5-6)
 
 | ADR | Title | Status | Lab | Date |
 |-----|-------|--------|-----|------|
-| 017 | Database Platform Selection | Planned | Lab 5 | - |
-| 018 | Database High Availability Strategy | Planned | Lab 5 | - |
-| 019 | DNS and Global Routing Strategy | Planned | Lab 6 | - |
-| 020 | Load Balancing Architecture | Planned | Lab 7 | - |
-| 021 | Serverless Computing Strategy | Planned | Lab 8 | - |
-| 022 | Event-Driven Messaging Architecture | Planned | Lab 9 | - |
-| 023 | Observability and Monitoring Strategy | Planned | Lab 10 | - |
+| [017](./adr-017-database-platform-strategy.md) | Database Platform Strategy | Accepted | Lab 5 | 2025-12-22 |
+| [018](./adr-018-high-availability-database-design.md) | High Availability Database Design | Accepted | Lab 5 | 2025-12-22 |
+| [019](./adr-019-database-security-framework.md) | Database Security Framework | Accepted | Lab 5 | 2025-12-22 |
+| [020](./adr-020-caching-strategy.md) | Caching Strategy | Accepted | Lab 5 | 2025-12-22 |
+| [021](./adr-021-database-backup-recovery.md) | Database Backup and Recovery | Accepted | Lab 5 | 2025-12-22 |
+| [022](./adr-022-global-content-delivery-strategy.md) | Global Content Delivery Strategy | Accepted | Lab 6 | 2025-12-22 |
+| [023](./adr-023-dns-management-routing.md) | DNS Management and Routing | Accepted | Lab 6 | 2025-12-22 |
+| [024](./adr-024-edge-security-implementation.md) | Edge Security Implementation | Accepted | Lab 6 | 2025-12-22 |
+| [025](./adr-025-ssl-tls-certificate-strategy.md) | SSL/TLS Certificate Strategy | Accepted | Lab 6 | 2025-12-22 |
+| [026](./adr-026-cdn-high-availability-design.md) | CDN High Availability Design | Accepted | Lab 6 | 2025-12-22 |
+
+### Application Services (Labs 7-10)
+
+| ADR | Title | Status | Lab | Date |
+|-----|-------|--------|-----|------|
+| 027 | Load Balancing Architecture | Planned | Lab 7 | - |
+| 028 | Serverless Computing Strategy | Planned | Lab 8 | - |
+| 029 | API Gateway Design | Planned | Lab 8 | - |
+| 030 | Event-Driven Messaging Architecture | Planned | Lab 9 | - |
+| 031 | Observability and Monitoring Strategy | Planned | Lab 10 | - |
 
 ### Operations & Modernization (Labs 11-13)
 
 | ADR | Title | Status | Lab | Date |
 |-----|-------|--------|-----|------|
-| 024 | Infrastructure as Code Strategy | Planned | Lab 11 | - |
-| 025 | Security Services Integration | Planned | Lab 12 | - |
-| 026 | Container Orchestration Strategy | Planned | Lab 13 | - |
+| 032 | Infrastructure as Code Strategy | Planned | Lab 11 | - |
+| 033 | Security Services Integration | Planned | Lab 12 | - |
+| 034 | Container Orchestration Strategy | Planned | Lab 13 | - |
 
 ## ADR Process
 
@@ -158,26 +171,50 @@ YYYY-MM-DD
 ### [Implementation Category 2]
 [Specific implementation guidance]
 
+### [Implementation Category 3]
+- [Implementation point 1]
+- [Implementation point 2]
+
 ## Implementation Timeline
 
 ### Phase 1: [Phase Name] (Week 1-X)
 - [ ] [Specific task with owner if applicable]
 - [ ] [Specific task with dependencies noted]
+- [ ] [Specific task with completion criteria]
 
 ### Phase 2: [Phase Name] (Week X-Y)
 - [ ] [Specific task]
+- [ ] [Specific task]
 - [ ] [Milestone: Key deliverable]
+
+### Phase 3: [Phase Name] (Week Y-Z)
+- [ ] [Specific task]
+- [ ] [Specific task]
+- [ ] [Final validation and documentation]
+
+**Critical Path Items:**
+- [Task that blocks other work]
+- [Task with external dependencies]
 
 **Total Implementation Time:** [X weeks/months]
 
 ## Related Implementation
+[If this decision has been implemented, reference the specific lab or code]
 This decision was implemented in [Lab X: Name](../../labs/lab-XX-name/README.md), which includes:
 - [Key implementation aspect 1]
 - [Key implementation aspect 2]
+- [Key implementation aspect 3]
+- [Key implementation aspect 4]
+
+[OR if not yet implemented:]
+This decision will be implemented in the following labs:
+- [Lab X: Name] - [What aspect will be implemented]
+- [Lab Y: Name] - [What aspect will be implemented]
 
 ## Success Metrics
 - **[Metric Category]**: [Specific measurable outcome]
 - **[Metric Category]**: [Specific measurable outcome]
+[Define how we'll know this decision was successful]
 
 ## Review Date
 [YYYY-MM-DD] ([timeframe]) - [What we'll evaluate]
@@ -188,6 +225,8 @@ This decision was implemented in [Lab X: Name](../../labs/lab-XX-name/README.md)
 - [Link to related ADRs or decisions]
 
 ## Appendix: [Optional Supporting Material]
+
+[Decision matrices, detailed analysis, calculations, etc.]
 
 | Criteria | Option 1 | Option 2 | Option 3 |
 |----------|----------|----------|----------|
@@ -201,45 +240,18 @@ This decision was implemented in [Lab X: Name](../../labs/lab-XX-name/README.md)
 - [Condition 3]
 ```
 
-## ADR Summary by Category
-
-### Security Decisions
-- **ADR-001**: Multi-account isolation strategy
-- **ADR-005**: Network security controls (NACLs, Security Groups)
-- **ADR-006**: VPC endpoints for private connectivity
-- **ADR-009**: Instance profile security (no stored credentials)
-
-### Networking Decisions
-- **ADR-002**: CIDR allocation strategy
-- **ADR-003**: Three-tier network segmentation
-- **ADR-004**: Multi-region DR network design
-- **ADR-006**: VPC endpoints configuration
-
-### Compute Decisions
-- **ADR-007**: Multi-tier compute architecture
-- **ADR-008**: Golden AMI management strategy
-- **ADR-010**: Auto Scaling with target tracking
-- **ADR-011**: EBS gp3 storage optimization
-
-### Storage Decisions
-- **ADR-012**: Multi-purpose S3 bucket architecture
-- **ADR-013**: CloudFront CDN integration
-- **ADR-014**: Lifecycle policies for cost optimization
-- **ADR-015**: Cross-region replication for DR
-- **ADR-016**: Event-driven processing with Lambda
-
 ---
 
 ### 📊 Project Navigation
 
 | Lab | Component | Status | Documentation |
 |-----|-----------|--------|---------------|
-| 1 | IAM & Organizations | ✅ Complete | [View](../../labs/lab-01-iam/README.md) |
-| 2 | VPC & Networking Core | ✅ Complete | [View](../../labs/lab-02-vpc/README.md) |
-| 3 | EC2 & Auto Scaling Platform | ✅ Complete | [View](../../labs/lab-03-ec2/README.md) |
-| 4 | S3 & Storage Strategy | ✅ Complete | [View](../../labs/lab-04-s3/README.md) |
-| 5 | RDS & Database Services | 📅 Planned | - |
-| 6 | Route53 & CloudFront Distribution | 📅 Planned | - |
+| 1 | IAM & Organizations | ✅ Complete | [View](/labs/lab-01-iam/README.md) |
+| 2 | VPC & Networking Core | ✅ Complete | [View](/labs/lab-02-vpc/README.md) |
+| 3 | EC2 & Auto Scaling Platform | ✅ Complete | [View](/labs/lab-03-ec2/README.md) |
+| 4 | S3 & Storage Strategy | ✅ Complete | [View](/labs/lab-04-s3/README.md) |
+| 5 | RDS & Database Services | ✅ Complete | [View](/labs/lab-05-rds/README.md) |
+| 6 | Route53 & CloudFront Distribution | ✅ Complete | [View](/labs/lab-06-route53-cloudfront/README.md) |
 | 7 | ELB & High Availability | 📅 Planned | - |
 | 8 | Lambda & API Gateway Services | 📅 Planned | - |
 | 9 | SQS, SNS & EventBridge Messaging | 📅 Planned | - |
@@ -248,4 +260,4 @@ This decision was implemented in [Lab X: Name](../../labs/lab-XX-name/README.md)
 | 12 | Security Services Integration | 📅 Planned | - |
 | 13 | Container Services (ECS/EKS) | 📅 Planned | - |
 
-*Last Updated: December 10, 2025*
+*Last Updated: December 22, 2025*
