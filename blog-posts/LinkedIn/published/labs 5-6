@@ -4,33 +4,48 @@
 
 ---
 
-Last week I released Labs 3 & 4 of Terminus Solutions—the enterprise AWS architecture project I built because I couldn't find what I needed when learning cloud: comprehensive documentation that shows not just what to build, but how companies actually think about infrastructure decisions.
+Last week I released Labs 3 & 4 of Terminus Solutions - the enterprise AWS architecture project I built because I couldn't find what I needed when learning cloud: comprehensive documentation that shows not just what to build, but how companies actually think about infrastructure decisions.
+
 
 Today, the data and global delivery layers are live.
 
+
 ✅ **Lab 5: RDS & Database Services**
-Multi-AZ RDS MySQL with synchronous replication and automatic failover (87 seconds tested). Read replicas distributed across AZs and cross-region to us-west-2 for DR. Aurora Serverless v2 for variable workloads with auto-scaling capacity. DynamoDB global tables for session management with sub-millisecond latency. ElastiCache Redis reducing query response time by 75%. Secrets Manager with automated 30-day credential rotation. Performance Insights and Enhanced Monitoring for deep database observability.
+
+Multi-AZ RDS MySQL with synchronous replication and automatic failover. Read replicas distributed across AZs for DR. Aurora Serverless variable workloads with auto-scaling capacity. DynamoDB global tables for session management with sub-millisecond latency. ElastiCache Redis.  Secrets Manager with credential rotation. 
+
 
 ✅ **Lab 6: Route 53 & CloudFront Distribution**
-Global CDN with 92.8% cache hit rate and sub-100ms TTFB worldwide. Multi-origin CloudFront architecture serving static content from S3 (OAC-secured), dynamic content from ALB, and media assets with optimized caching. Origin groups for automatic failover. Route 53 with health checks, latency-based routing, and geolocation policies. AWS WAF at the edge blocking OWASP Top 10 patterns. Lambda@Edge injecting security headers on every response. SSL/TLS certificates via ACM with auto-renewal.
+
+Global CDN. Multi-origin CloudFront architecture serving static content from S3, dynamic content from ALB, and media assets with optimized caching. Origin groups for automatic failover. Route 53 with health checks, latency-based routing, and geolocation policies. AWS WAF at the edge.  Lambda@Edge injecting security headers on every response. SSL/TLS certificates via ACM with auto-renewal.
+
 
 What makes this different from typical tutorials:
 
-📋 **Architecture Decision Records** — Why Multi-AZ instead of single instance? Why Route 53 over external DNS? Why Origin Shield with CloudFront? Why read replicas instead of vertical scaling? Every choice documented with alternatives considered and tradeoffs accepted. 10 new ADRs covering database platform strategy, high availability design, global content delivery, DNS management, and edge security.
 
-💰 **Real Cost Analysis** — Lab 5 database infrastructure runs ~$150/month with detailed breakdowns by component (RDS, Aurora, DynamoDB, ElastiCache). Lab 6 global CDN costs ~$66/month including WAF protection. Both include scaling scenarios showing costs at 10x and 100x traffic levels, plus optimization strategies that can reduce costs by 40-60%.
+📋 **Architecture Decision Records** 
 
-🔧 **Operational Documentation** — What happens when RDS fails over? How do you debug replica lag? Why isn't your CloudFront cache invalidating? How do you test Route 53 failover without impacting production? Real problems I encountered, real solutions I implemented, complete troubleshooting guides for each service.
 
-🧪 **Testing Checklists** — Database connectivity tests. Failover validation procedures. IAM authentication verification. DNS resolution testing. Cache behavior validation. Security header analysis. Step-by-step procedures for validating every component before calling it production-ready.
+💰 **Real Cost Analysis**
+
+
+🔧 **Operational Documentation**
+
+
+🧪 **Testing Checklists**
+
 
 The infrastructure continues building on itself. Database endpoints are ready for application integration. CloudFront origins are configured for the ALB from Lab 3. Route 53 health checks are monitoring the entire stack. WAF rules are protecting at the edge. Each lab creates integration points for what comes next.
 
-Labs 7-8 (ELB & Lambda/API Gateway) are currently in progress—rolling out over the coming days.
+
+Labs 7-8 (ELB & Lambda/API Gateway) are currently in progress, rolling out over the coming days.
+
 
 🌐 jaredintech | 🐙 terminus-solutions
 
+
 Check the comment section for direct links to the GitHub repository and project documentation.
+
 
 #AWS #CloudComputing #DevOps
 
